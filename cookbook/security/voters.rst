@@ -1,7 +1,7 @@
 .. index::
    single: Security, Voters
 
-How to implement your own Voter to blacklist IP Addresses
+How to implement your own Voter
 =========================================================
 
 The Symfony2 security component provides several layers to authenticate users.
@@ -32,13 +32,20 @@ which requires the following three methods:
 
 
 The ``supportsAttribute()`` method is used to check if the voter supports
-the given user attribute (i.e: a role, an acl, etc.).
+the given user attribute (i.e: a role, an acl, etc.). The ``$attribute`` in question
+is the string representation of the role, the ACL permission, etc.
 
-The ``supportsClass()`` method is used to check if the voter supports the
-current user token class.
+The ``supportsClass()`` method is used to check if the voter supports the object class.
 
 The ``vote()`` method must implement the business logic that verifies whether
-or not the user is granted access. This method must return one of the following
+or not the user is granted access. The parameters it receives come from the high-level call to check permissions:
+
+.. code-block:: php
+
+  $this->get('security.context')->isGranted($attribute, $object);
+
+
+This method must return one of the following
 values:
 
 * ``VoterInterface::ACCESS_GRANTED``: The user is allowed to access the application
